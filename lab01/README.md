@@ -1,7 +1,20 @@
-Lab 1: Haskell Programming, 9.00-10.00
+Lab 1: Haskell 
 ======================================
 
-We advice you to use a Linux machine in the Lab 2 to do this exercise if possible.
+Please either use a Linux machine in the Lab 2 or install
+Haskell Platform on your own machine. Installation packages are available for
+Linux, Mac, and Windows:
+
+```
+https://www.haskell.org/platform/
+```
+
+Haskell distribution on lab machines is slightly outdated (GHC 7.6) and the
+version of Cabal build system does not support some newer features, which you get when
+you install the newest platform on your own. Please pay attention to the
+following instructions as the two options (older and newer Cabal) are slightly 
+different:
+
 
 1. Obtain a copy of this repository according to the following instructions.
     1. In a terminal window, clone the git repository to your local machine and
@@ -23,13 +36,13 @@ We advice you to use a Linux machine in the Lab 2 to do this exercise if possibl
    2. Compile it in the terminal with:
 
         ```
-        $ ghc -o main Main.hs
+        $ ghc -o helloWorld Main.hs
         ```
-   3. You can then run the executable from the terminal (`./main` on Unix
-      systems, `main.exe` on Windows):
+   3. You can then run the executable from the terminal (`./helloWorld` on Unix
+      systems, `helloWorld.exe` on Windows):
 
         ```
-        $ ./main
+        $ ./helloWorld
         Hello, World!
         ```
 
@@ -105,28 +118,56 @@ We advice you to use a Linux machine in the Lab 2 to do this exercise if possibl
         There is a package description in the file *lab01.cabal* However, you do
         not need to concern yourself with contents of this file
 
-    2. Initialise new development environment (sandbox) for a package and
-       configure the package (in this order):
 
-       ```
-       $ cabal sandbox init
-       $ cabal configure
-       ```
-    3. Now the environment is prepared and you can instruct cabal to build and
-       run the executable for you:
+    2. This step differs for the new and old version of cabal:
 
-       ```
-       $ cabal run
-       ```
-
-       you can also ask cabal to run GHCi while loading the main file:
-
-       ```
-       $ cabal repl
-       ```
+        1. For the Cabal with ghc 7.8 and on (your machine):
     
-       (note: repl stands for "read--eval--print loop", which is what GHCi does)
+            Initialise new development environment (sandbox) for a package and
+            configure the package (in this order):
 
+            ```
+            $ cabal sandbox init
+            $ cabal configure
+            ```
+
+            Now the environment is prepared and you can instruct cabal to build and
+            run the executable for you:
+
+            ```
+            $ cabal build
+            $ cabal run
+            ```
+
+            you can also ask cabal to run GHCi while loading the main file:
+
+            ```
+            $ cabal repl
+            ```
+    
+            (note: repl stands for "read--eval--print loop", which is what GHCi does)
+
+        2. For the Cabal with ghc 7.6 and on (lab machine):
+    
+            Configure the package: 
+
+            ```
+            $ cabal configure
+            ```
+
+            Now the environment is prepared and you can instruct cabal to build 
+            the executable for you:
+
+            ```
+            $ cabal build
+            ```
+
+            However, you need to run the built executable manually:
+
+            ```
+            $ ./dist/build/lab01/lab01
+            ```
+    
 
     4. Bonus: You can try to generate documentation for this package:
 
@@ -138,7 +179,7 @@ We advice you to use a Linux machine in the Lab 2 to do this exercise if possibl
 
 
 5. Implement your own boolean functions `myAnd`, `myOr`, `myImply`, and `myXor`.
-   Behaviour of these function is described in comments in the file *Main.hs*
+   Behaviour of these functions is described in comments in the file *Main.hs*.
    For each function uncomment the type signature and provide an implementation.
 
 6. Define a function that converts boolean value to its textual description. Yet

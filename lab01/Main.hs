@@ -45,7 +45,7 @@ myImply x    y     = True
 -- | myXor is called Exclusive disjunction (exclusive or), is a logical operation
 --   that outputs True whenever both inputs differ (one is True, the other is False)
 --
--- myXor :: Bool -> Bool -> Bool.
+-- myXor :: Bool -> Bool -> Bool
 
 myXor True True   = False
 myXor True False  = True
