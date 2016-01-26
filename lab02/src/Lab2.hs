@@ -10,18 +10,18 @@
 --
 -- Note that integer zero (@0 :: Int@) and character for zero (@'0' :: Char@) are
 -- two different values and __cannot__ be used interchangeably.
--- 
+--
 -- The 'String' type, which we alrady know, is in fact only and alias for a list
 -- of characters, i.e. ['Char']. As such, you can use list constructors for
 -- pattern matching on strings, e.g.:
--- 
+--
 -- > containsLowercaseA :: String -> Bool
 -- > containsLowercaseA []      = False
 -- > containsLowercaseA ('a':_) = True
 -- > containsLowercaseA (_:ss)  = containsLowercaseA ss
--- 
+--
 module Lab2 (
-      deletion 
+      deletion
     , search
     , append
     , revprefix
@@ -41,51 +41,55 @@ module Lab2 (
 --
 -- The behavior of your 'deletion' function should be as follows:
 --
--- >>> deletion ['a', 'b', 'c', 'd'] 'c' 
+-- >>> deletion ['a', 'b', 'c', 'd'] 'c'
 -- ['a', 'b', 'd']
 --
--- >>> deletion ['a', 'b', 'c', 'c'] 'c' 
+-- >>> deletion ['a', 'b', 'c', 'c'] 'c'
 -- ['a', 'b']
 --
--- >>> deletion ['a', 'b', 'c', 'c'] 'e' 
+-- >>> deletion ['a', 'b', 'c', 'c'] 'e'
 -- ['a', 'b', 'c', 'c']
 --
 -- Note that you can delete the dummy definition
 --
 -- > deletion = undefined
 --
--- and provide as many of your own defining equations as needed. This 
+-- and provide as many of your own defining equations as needed. This
 -- holds also for the rest of the function definitions in this file.
 --
 deletion :: [Char] -> Char -> [Char]
-deletion = undefined 
+deletion []     _ = []
+deletion (x:xs) c = if c == x then     deletion xs c
+                              else x : deletion xs c
 
 
 -- | Implement a search function for key-value store
 --
 -- A list of pairs, [('Int', 'String')], can be viewed as a key-value store.
--- A pair ('Int', 'String') associates a key of type 'Int' to a value of type 'String'.  
+-- A pair ('Int', 'String') associates a key of type 'Int' to a value of type 'String'.
 -- Implement a search function that returns a list of all values that are associated
--- with a given 'Int' key, e. g.: 
+-- with a given 'Int' key, e. g.:
 --
--- >>> search [(1, "University"),(2, "of"), (3, "Dundee")] 3 
+-- >>> search [(1, "University"),(2, "of"), (3, "Dundee")] 3
 -- ["Dundee"]
 --
--- >>> search [(1, "University"),(2, "of"), (3, "Dundee"), (3, "Scotland")] 3 
+-- >>> search [(1, "University"),(2, "of"), (3, "Dundee"), (3, "Scotland")] 3
 -- ["Dundee", "Scotland"]
 --
--- >>> search [(1, "University"),(2, "of"), (3, "Dundee")] 4 
+-- >>> search [(1, "University"),(2, "of"), (3, "Dundee")] 4
 -- []
 --
 search :: [(Int, String)] -> Int -> [String]
-search = undefined
+search []         _ = []
+search ((k,v):xs) q = if k == q then v : search xs q
+                                else     search xs q
 
 
 -- | Define an 'append' function
 --
 -- This function appends two list, e.g.:
 --
--- >>> append [1, 2, 3] [4, 5] 
+-- >>> append [1, 2, 3] [4, 5]
 -- [1, 2, 3, 4, 5]
 --
 -- >>> append "Hello " "World!"
@@ -94,26 +98,29 @@ search = undefined
 -- Please do not use the ('++') operator.
 --
 append :: [a] -> [a] -> [a]
-append = undefined
+append []     ys = ys
+append (x:xs) ys = x : append xs ys
 
 
--- | Define a reverse-prefix function. 
+-- | Define a reverse-prefix function.
 --
 -- The behaviour of 'revprefix' function should be as follows:
--- 
--- >>> revprefix "abc" 'e' 
+--
+-- >>> revprefix "abc" 'e'
 -- "cbae"
 --
--- >>> revprefix "hello" 'a' 
+-- >>> revprefix "hello" 'a'
 -- "olleha"
 --
 -- Please do not use the append function.
 revprefix :: String -> Char -> String
-revprefix = undefined
+revprefix xs c = rv' [c] xs
+  where rv' a []     = a
+        rv' a (x:ys) = rv' (x:a) ys
 
 -- | Define a 'forAll' function for list
 --
--- The functions takes in a list and a boolean function as an argument and 
+-- The functions takes in a list and a boolean function as an argument and
 -- returns 'True' when the boolean function applied to each element of the list returns 'True',
 -- otherwise the 'forAll' will return 'False', e.g.
 --
@@ -126,13 +133,14 @@ revprefix = undefined
 -- where 'even' is a function is Haskell standard library (Prelude)
 --
 forAll :: (a -> Bool) -> [a] -> Bool
-forAll = undefined
+forAll _ [] = True
+forAll f (x:xs) = if f x then forAll f xs else False
 
 
 -- | Define an 'exists' function for a list
 --
--- This is a counterpart to the 'forAll' function. It takes in a list and a boolean function 
--- as an argument and returns 'True' when at least one element in the list satisfies the boolean 
+-- This is a counterpart to the 'forAll' function. It takes in a list and a boolean function
+-- as an argument and returns 'True' when at least one element in the list satisfies the boolean
 -- function, otherwise the 'exists' will return 'False', e.g.:
 --
 -- >>> exists even [3,5,7]
@@ -142,26 +150,29 @@ forAll = undefined
 -- True
 --
 exists :: (a -> Bool) -> [a] -> Bool
-exists = undefined
+exists _ [] = False
+exists f (x:xs) = if f x then True else exists f xs
 
 
--- | Define an 'insertAt' function 
+-- | Define an 'insertAt' function
 --
 -- This function inserts an element into a list at a given position, e.g.:
 --
--- >>> insertAt ['a', 'b', 'c'] 'd' 0 
+-- >>> insertAt ['a', 'b', 'c'] 'd' 0
 -- ['d', 'a', 'b', 'c']
 --
--- >>> insertAt ['a', 'b', 'c'] 'd' 2 
+-- >>> insertAt ['a', 'b', 'c'] 'd' 2
 -- ['a', 'b','d', 'c']
 --
 -- You may assume the number is always less or equal to the length of the list
 --
 insertAt :: [a] -> a -> Int -> [a]
-insertAt = undefined
+insertAt xs     y 0 = y:xs
+insertAt (x:xs) y n = x : insertAt xs y (n-1)
+insertAt []     y _ = [y]
 
 
--- | Define a function 'sortList' 
+-- | Define a function 'sortList'
 --
 -- The function sorts a list of pairs (the above-described key-value store)
 -- according to the key, e.g.:
@@ -170,7 +181,10 @@ insertAt = undefined
 -- [(1, "University"),(2, "of"), (3, "Dundee")]
 --
 sortList :: [(Int, String)] -> [(Int, String)]
-sortList = undefined
-
-
-
+sortList xs = rep (length xs) xs
+  where bub []                   = []
+        bub [x]                  = [x]
+        bub ((k1,v1):(k2,v2):ys) = if k2 < k1 then bub ((k2,v2):(k1,v1):ys)
+                                              else (k1,v1) : bub ((k2,v2):ys)
+        rep 0 ys = ys
+        rep n ys = rep (n-1) (bub ys)
