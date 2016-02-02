@@ -15,11 +15,11 @@
 -- where 'Identifier' is a new name for a type beginning with a capital letter and
 -- 'Type' is a monomorphic type (i.e. without type variables). These synonyms can
 -- also by used with polymorphic types but we do not need to concern ourselves
--- with such a situation for now. A type synonym may be used in place of the type 
+-- with such a situation for now. A type synonym may be used in place of the type
 -- on right hand side of 'type' statement and conversely this type may be used
 -- instead of the synonym. It servers mostly as a documentation -- we can see
 -- the intended purpose of a function from its type (both in source code and in
--- Haddock). 
+-- Haddock).
 --
 -- In this lab we are going to use a synonym for integer matrices:
 --
@@ -30,7 +30,7 @@
 -- the lists representing columns has the same length as we would expect in case
 -- of a well-formed matrix. We let solely to a programmer to make sure that
 -- all functions on matrices maintain these invariant.
--- 
+--
 module Lab3 (
       partition
     , myConcat
@@ -42,7 +42,7 @@ module Lab3 (
     , multiplyMatrix
 ) where
 
--- | Implement a function that takes a predicate a list and returns the pair 
+-- | Implement a function that takes a predicate a list and returns the pair
 -- of lists of elements which do and do not satisfy the predicate, respectively,
 -- while keeping the relative order of elements as in the original list; e.g.:
 --
@@ -53,7 +53,7 @@ module Lab3 (
 -- predicate on @a@
 --
 partition :: (a -> Bool) -> [a] -> ([a], [a])
-partition = undefined
+partition f xs = (filter f xs, filter (not . f) xs)
 
 
 -- | Implement a function that concatenates all the elements of a list
@@ -65,7 +65,7 @@ partition = undefined
 -- Please avoid using the standard 'concat' function.
 --
 myConcat :: [[a]] -> [a]
-myConcat = undefined
+myConcat xs = foldr (++) [] xs
 
 
 -- | Define a function that returns the least element of a non-empty
@@ -78,16 +78,17 @@ myConcat = undefined
 -- Please avoid using the standard minimum function.
 --
 myMinimum :: [Integer] -> Integer
-myMinimum = undefined
+myMinimum [] = undefined
+myMinimum (x:xs) = foldr min x xs
 
--- | Define a function that returns all non-empty subsequencies of a 
--- non-empty list. A subsequence of a list L is such a list S that can be 
+-- | Define a function that returns all non-empty subsequencies of a
+-- non-empty list. A subsequence of a list L is such a list S that can be
 -- derived from L by deleting some elements of L, e.g "hlo" is a subsequence of
 -- "hello". Note that every list is a subsequence of itself (by deleting no
 -- character at all).
 --
 -- The behaviour of 'subsequences' function should be e.g.:
--- 
+--
 -- >>> subsequences "UoD"
 -- ["U","o","Uo","D","UD","oD","UoD"]
 --
@@ -95,7 +96,8 @@ myMinimum = undefined
 -- as a number of different ways how to select the subsequence
 --
 subsequences :: [a] -> [[a]]
-subsequences = undefined
+subsequences []     = []
+subsequences (x:xs) = let sub = subsequences xs in [x] : map (x:) sub ++ sub
 
 -- | We define a new type alias 'Matrix' for use with the rest of functions in
 -- this lab.
@@ -105,7 +107,7 @@ type Matrix = [[Integer]]
 
 -- | For convenience we provide a matrix:
 ourMatrix :: Matrix
-ourMatrix = 
+ourMatrix =
     [ [ 1, 2, 0] -- column! 1
     , [ 4, 0, 0] -- column! 2
     ]
@@ -119,7 +121,9 @@ ourMatrix =
 -- ]
 --
 transposeMatrix :: Matrix -> Matrix
-transposeMatrix = undefined
+transposeMatrix []     = []
+transposeMatrix [c]    = map (:[]) c
+transposeMatrix (c:cs) = zipWith (:) c (transposeMatrix cs)
 
 -- | Define a function that returns a product of two matrices, e.g:
 --
@@ -133,8 +137,4 @@ transposeMatrix = undefined
 -- first of the matrices is k*l and the other one is l*m
 --
 multiplyMatrix :: Matrix -> Matrix -> Matrix
-multiplyMatrix = undefined
-
-
-
-
+multiplyMatrix xs ys = [ [ sum $ zipWith (*) ar bc | bc <- (transposeMatrix xs) ] | ar <- ys ]
