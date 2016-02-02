@@ -23,8 +23,9 @@ please pay attention to the instructions.
 1. Update your local copy of this repository:
 
     ```
+    $ cd ac21007_lab
     $ git pull
-    $ cd ac21007_lab/lab02
+    $ cd lab02
     ```
 
 2. In Lab 2 you are provided with a package 'lab2'. This is a library of some

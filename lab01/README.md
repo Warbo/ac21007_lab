@@ -20,7 +20,7 @@ different:
     1. In a terminal window, clone the git repository to your local machine and
         open *lab01* directory:
 
-        ```
+        ```sh
         $ git clone https://github.com/frantisekfarka/ac21007_lab.git
         $ cd ac21007_lab/lab01
         ```
@@ -35,13 +35,13 @@ different:
    1. Open file *Main.hs* in a text editor and inspect it.
    2. Compile it in the terminal with:
 
-        ```
+        ```sh
         $ ghc -o helloWorld Main.hs
         ```
    3. You can then run the executable from the terminal (`./helloWorld` on Unix
       systems, `helloWorld.exe` on Windows):
 
-        ```
+        ```sh
         $ ./helloWorld
         Hello, World!
         ```
@@ -52,7 +52,7 @@ different:
 
    1. Load the file *Main.hs* to GHCi:
 
-        ```
+        ```sh
         $ ghci Main.hs
         GHCi, version 7.10.2: http://www.haskell.org/ghc/  :? for help
         [1 of 1] Compiling Main             ( Main.hs, interpreted )
@@ -63,7 +63,7 @@ different:
         or alternatively run plain GHCi shell and use a command `:load <module>` to
         load it:
 
-        ```
+        ```sh
         $ ghci
         GHCi, version 7.10.2: http://www.haskell.org/ghc/  :? for help
         Prelude> :load Main.hs
@@ -126,7 +126,7 @@ different:
             Initialise new development environment (sandbox) for a package and
             configure the package (in this order):
 
-            ```
+            ```sh
             $ cabal sandbox init
             $ cabal configure
             ```
@@ -134,14 +134,14 @@ different:
             Now the environment is prepared and you can instruct cabal to build and
             run the executable for you:
 
-            ```
+            ```sh
             $ cabal build
             $ cabal run
             ```
 
             you can also ask cabal to run GHCi while loading the main file:
 
-            ```
+            ```sh
             $ cabal repl
             ```
     
@@ -151,27 +151,27 @@ different:
     
             Configure the package: 
 
-            ```
+            ```sh
             $ cabal configure
             ```
 
             Now the environment is prepared and you can instruct cabal to build 
             the executable for you:
 
-            ```
+            ```sh
             $ cabal build
             ```
 
             However, you need to run the built executable manually:
 
-            ```
+            ```sh
             $ ./dist/build/lab01/lab01
             ```
     
 
     4. Bonus: You can try to generate documentation for this package:
 
-       ```
+       ```sh
        $ cabal haddock --executables
        ```
 
