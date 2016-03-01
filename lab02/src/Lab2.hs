@@ -57,7 +57,7 @@ module Lab2 (
 -- and provide as many of your own defining equations as needed. This
 -- holds also for the rest of the function definitions in this file.
 --
-deletion :: [Char] -> Char -> [Char]
+deletion :: String -> Char -> String
 deletion []     _ = []
 deletion (x:xs) c = if c == x then     deletion xs c
                               else x : deletion xs c
@@ -98,8 +98,7 @@ search ((k,v):xs) q = if k == q then v : search xs q
 -- Please do not use the ('++') operator.
 --
 append :: [a] -> [a] -> [a]
-append []     ys = ys
-append (x:xs) ys = x : append xs ys
+append xs ys = foldr (:) ys xs
 
 
 -- | Define a reverse-prefix function.
@@ -115,8 +114,7 @@ append (x:xs) ys = x : append xs ys
 -- Please do not use the append function.
 revprefix :: String -> Char -> String
 revprefix xs c = rv' [c] xs
-  where rv' a []     = a
-        rv' a (x:ys) = rv' (x:a) ys
+  where rv' = foldl (flip (:))
 
 -- | Define a 'forAll' function for list
 --
@@ -134,7 +132,7 @@ revprefix xs c = rv' [c] xs
 --
 forAll :: (a -> Bool) -> [a] -> Bool
 forAll _ [] = True
-forAll f (x:xs) = if f x then forAll f xs else False
+forAll f (x:xs) = f x && forAll f xs
 
 
 -- | Define an 'exists' function for a list
@@ -151,7 +149,7 @@ forAll f (x:xs) = if f x then forAll f xs else False
 --
 exists :: (a -> Bool) -> [a] -> Bool
 exists _ [] = False
-exists f (x:xs) = if f x then True else exists f xs
+exists f (x:xs) = f x || exists f xs
 
 
 -- | Define an 'insertAt' function

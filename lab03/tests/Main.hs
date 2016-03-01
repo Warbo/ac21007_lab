@@ -1,6 +1,6 @@
 module Main where
 
-import Control.Monad          (when)    
+import Control.Monad          (when)
 import Data.List as D         (sort, partition, subsequences)
 import System.Exit            (exitFailure)
 import Test.QuickCheck (
@@ -63,12 +63,12 @@ import Lab3 as L3 (
         -- prepare nonexisting key
 --        let k'' = foldr1 max (fmap fst dict) + 1
 --
---        return $ 
+--        return $
 --            (search dict k) == (mySearch dict k) &&
 --            (search dictMult k' == mySearch dictMult k') &&
 --            (search dict k'' == []) &&
 --            True
---    where 
+--    where
 --        mySearch ds k  = map snd $  filter (((==) k) . fst) ds
 
 
@@ -78,7 +78,7 @@ import Lab3 as L3 (
 --    return $ myAt lst ch pos == insertAt lst ch pos
 
 --    where
---        myAt xs x pos = 
+--        myAt xs x pos =
 --            let (y, z) = splitAt pos xs in concat [y, [x], z]
 
 
@@ -87,7 +87,7 @@ import Lab3 as L3 (
 prop_partition :: [Int] -> Bool
 prop_partition xs = L3.partition f xs == D.partition f xs
     where
-        f = (\x -> x `mod` 3 == 0)  
+        f x = x `mod` 3 == 0
 
 prop_myconcat :: [[Int]] -> Bool
 prop_myconcat xs = myConcat xs == concat xs
@@ -101,12 +101,12 @@ prop_mysubs y ys = let xs = take 5 $ y : ys in (sort . L3.subsequences) xs == (s
 -- | Helper to integrate QuicCheck with exitcode-stdio
 quickCheckFailWith :: Testable prop => Args -> prop -> IO ()
 quickCheckFailWith args p = do
-        success <- fmap isSuccess $ quickCheckWithResult args p 
-        when (not success) $ exitFailure -- exit if the result is a failure
+        success <- isSuccess <$> quickCheckWithResult args p
+        unless success exitFailure -- exit if the result is a failure
 
 -- | Helper, ditto
 quickCheckFail :: Testable prop => prop -> IO ()
-quickCheckFail p = quickCheckFailWith ourArgs p
+quickCheckFail = quickCheckFailWith ourArgs
 
 ourArgs :: Args
 ourArgs = stdArgs {
@@ -115,7 +115,7 @@ ourArgs = stdArgs {
 
 
 -- 3x2 test matrix
-prop_transpose :: 
+prop_transpose ::
     Integer -> Integer -> Integer
     -> Integer -> Integer -> Integer
     -> Bool
@@ -125,12 +125,12 @@ prop_transpose a b c d e f = transposeMatrix ms == transposeMatrix' ms
 
 transposeMatrix' :: Matrix -> Matrix
 transposeMatrix' ms = fst $ recon ([], ms)
-    where 
+    where
         recon (t, []) = (t, [])
         recon (t, m)  = let (tc, mcs) = extract m in recon (t ++ [tc], mcs)
-        extract ms' = foldr f ([], []) ms'
+        extract = foldr f ([], [])
         f []     _         = error "unreachable"
-        f (c:[]) (mc, mcs) = (c:mc, mcs)
+        f [c]    (mc, mcs) = (c:mc, mcs)
         f (c:cs) (mc, mcs) = (c:mc, cs:mcs)
 
 
@@ -142,15 +142,15 @@ prop_multiply a b c d e f = multiplyMatrix ms ns == multiplyMatrix' ms ns
     where
         ms = [[a, b, c], [d, e, f]]
         ns = [[a, d], [c, f], [e, b]]
-    
+
 multiplyMatrix' :: Matrix -> Matrix -> Matrix
-multiplyMatrix' ms ns = mxMx ms ns
+multiplyMatrix' = mxMx
     where
         vecVec xs ys = sum $ zipWith (*) xs ys
         mxVec ms' v = map (vecVec v) ms'
-        mxMx mx nx = map (mxVec (transposeMatrix' mx)) (nx)
+        mxMx mx = map (mxVec (transposeMatrix' mx))
 
-    
+
 
 
 -- | Run all the properties
@@ -170,6 +170,3 @@ main = do
 
     putStrLn "\nmultiplyMatrix:"
     quickCheckFail prop_multiply
-
-
-

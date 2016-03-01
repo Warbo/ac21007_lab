@@ -65,7 +65,9 @@ partition f xs = (filter f xs, filter (not . f) xs)
 -- Please avoid using the standard 'concat' function.
 --
 myConcat :: [[a]] -> [a]
-myConcat xs = foldr (++) [] xs
+myConcat = let app = (++)
+               nil = []
+            in foldr app nil
 
 
 -- | Define a function that returns the least element of a non-empty
@@ -137,4 +139,4 @@ transposeMatrix (c:cs) = zipWith (:) c (transposeMatrix cs)
 -- first of the matrices is k*l and the other one is l*m
 --
 multiplyMatrix :: Matrix -> Matrix -> Matrix
-multiplyMatrix xs ys = [ [ sum $ zipWith (*) ar bc | bc <- (transposeMatrix xs) ] | ar <- ys ]
+multiplyMatrix xs ys = [ [ sum $ zipWith (*) ar bc | bc <- transposeMatrix xs ] | ar <- ys ]
