@@ -1,6 +1,6 @@
 module Main where
 
-import Control.Monad          (when)
+import Control.Monad          (unless)
 import Data.List              (sortBy)
 import System.Exit            (exitFailure)
 import Test.QuickCheck (
